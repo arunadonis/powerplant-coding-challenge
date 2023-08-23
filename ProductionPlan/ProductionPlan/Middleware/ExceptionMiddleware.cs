@@ -10,17 +10,20 @@ namespace ProductionPlan.Middleware;
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    public ExceptionMiddleware(RequestDelegate nextDelegate)
+    private readonly ILogger<ExceptionMiddleware> _logger;
+
+    public ExceptionMiddleware(RequestDelegate nextDelegate, ILogger<ExceptionMiddleware> logger)
     {
         _next = nextDelegate;
+        _logger = logger;
     }
 
     public async Task Invoke(HttpContext context, IServiceProvider serviceProvider)
     {
-        
+
         try
         {
-           await _next(context);
+            await _next(context);
         }
         catch (ArgumentNullException e)
         {
@@ -38,6 +41,8 @@ public class ExceptionMiddleware
 
     private async Task WriteResponseAsync(HttpContext context, string message, HttpStatusCode statusCode)
     {
+        _logger.LogError(message);
+
         context.Response.StatusCode = (int)statusCode;
 
         await context.Response.Body.WriteAsync(Encoding.UTF8.GetBytes(message));

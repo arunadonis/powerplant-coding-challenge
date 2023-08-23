@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ProductionPlan.Models;
+using ProductionPlan.Services;
 
 namespace ProductionPlan.Controllers;
 
 [ApiController]
 public class ProductionPlanController : ControllerBase
 {
-    private readonly IProductionPlan _productionPlan;
-    public ProductionPlanController(IProductionPlan productionPlan)
+    private readonly IProductionPlanService _productionPlan;
+
+    public ProductionPlanController(IProductionPlanService productionPlan)
     {
         _productionPlan = productionPlan;
     }

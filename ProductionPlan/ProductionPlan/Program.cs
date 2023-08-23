@@ -1,15 +1,25 @@
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ProductionPlan;
+using ProductionPlan.Helpers;
+using ProductionPlan.LoadServices;
+using ProductionPlan.LoadServices.Interfaces;
 using ProductionPlan.Middleware;
+using ProductionPlan.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSingleton<IProductionPlan, ProductionPlan.ProductionPlan>();
-builder.Services.AddControllers().AddJsonOptions(x => {
+builder.Services.AddScoped<IProductionPlanService, ProductionPlanService>();
+builder.Services.AddScoped<IValidationHelper, ValidationHelper>();
+builder.Services.AddScoped<IGasPlantService, GasPlantService>();
+builder.Services.AddScoped<IWindTurbineService, WindTurbineService>();
+builder.Services.AddScoped<ITurbojetPlantService, TurbojetPlantService>();
+
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+{
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
@@ -36,3 +46,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

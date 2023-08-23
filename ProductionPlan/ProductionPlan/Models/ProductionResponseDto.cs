@@ -3,5 +3,5 @@
 public class ProductionResponseDto
 {
     public string Name { get; set; }
-    public int P { get; set; }
+    public decimal P { get; set; }
 }
